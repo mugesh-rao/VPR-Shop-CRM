@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/static/css/main.abe36fe5.css",
+    "main.js": "/static/js/main.e0afe291.js",
+    "static/js/787.ff98dd28.chunk.js": "/static/js/787.ff98dd28.chunk.js",
+    "static/media/logo.png": "/static/media/logo.897e1f15a9c62df7d209.png",
+    "static/media/cabi.png": "/static/media/cabi.90e577f089ad371fece2.png",
+    "static/media/driveri.png": "/static/media/driveri.efa4289b8b7dfa01c188.png",
+    "static/media/Report.png": "/static/media/Report.1e9406b50479cbe31629.png",
+    "static/media/Employees.png": "/static/media/Employees.b7bfeb59e532d2fa6c90.png",
+    "static/media/Invoice.png": "/static/media/Invoice.7cc1130696f7c61b1c36.png",
+    "static/media/Driver_Management.png": "/static/media/Driver_Management.d224b49d2073e1a5c8b2.png",
+    "index.html": "/index.html",
+    "main.abe36fe5.css.map": "/static/css/main.abe36fe5.css.map",
+    "main.e0afe291.js.map": "/static/js/main.e0afe291.js.map",
+    "787.ff98dd28.chunk.js.map": "/static/js/787.ff98dd28.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.abe36fe5.css",
+    "static/js/main.e0afe291.js"
+  ]
+}

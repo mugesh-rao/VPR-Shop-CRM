@@ -1,0 +1,18 @@
+npm install -D tailwindcss react-icons react-router-dom
+npm install  chart.js@^4.0.0 react-chartjs-2@^5.0.0
+npm install sweetalert2
+npm install @faker-js/faker 
+qrcode.react
+npm install react-loader-spinner 
+npm i sweetalert2-react-content
+spinners
+npm i react-hot-toast
+npm install axios
+npm i 
+
+
+
+
+to use 
+
+https://hypeserver.github.io/react-date-range/
