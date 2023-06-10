@@ -34,7 +34,7 @@ export default function TripDataTable() {
   const [totalDocs, setTotalDocs] = useState(0);
 
   const getTrips = async () => {
-    const data = await getDocs(collection(db, "RouteList", company, date, "All", TripType)
+    const data = await getDocs(collection(db, "Sales")
     );
     setTrip(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     setTotalDocs(data.size);

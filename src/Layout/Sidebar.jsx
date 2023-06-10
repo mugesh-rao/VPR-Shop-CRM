@@ -15,8 +15,8 @@ const SidebarNew = () => {
     { title: "Home", path: "/Home", src: <HomeIcon /> },
     { title: "Sales", path: "/Trip", src: <TripIcon /> },
     { title: "Purchase", path: "/Driver", src: <DriverIcon /> },
-    { title: "Suppliers", path: "/Employee", src: <EmployeeIcon /> },
-    { title: "Invoice", path: "/Invoice", src: <InvoiceIcon /> },
+    { title: "Suppliers", path: "/employee-list", src: <EmployeeIcon /> },
+    { title: "Invoice", path: "/invoice-list", src: <InvoiceIcon /> },
     { title: "Monthly Reports", path: "/Report", src: <ReportIcon /> },
     { title: "Hiki Camera", path: "/Passbook", src: <PassbookIcon /> },
   ];

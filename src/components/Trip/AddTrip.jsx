@@ -116,16 +116,6 @@ const AddTrip = () => {
 token:"",
     });
 
-    // Loop through history documents and update EmpName
-    const historyTypes = ["HistoryCompleted", "HistoryCancelled"];
-    await Promise.all(
-      historyTypes.map(async (historyType) => {
-        const historyDocRef = doc(db, "EmployeeList", EmpID, historyType, "ZFlag");
-        await setDoc(historyDocRef, { Flag: "" });
-      })
-    );
-
-
 
   };
 
@@ -154,7 +144,7 @@ token:"",
       setDriverNameError("");
     }
     try {
-      await setDoc(doc(db, "RouteList", Company, TripDate, "All", TripType, RouteID),
+      await setDoc(doc(db, "Sales",RouteID),
         {
           RouteName,
           RouteID,

@@ -8,7 +8,6 @@ function Passbook() {
   return (
    
     <Layout>
-     
       
     </Layout>
   )

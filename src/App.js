@@ -8,13 +8,15 @@ import TripManagement from "./pages/TripManagement";
 import Report from './pages/Report';
 import AddTrip from "./components/Trip/AddTrip";
 import Login from "./pages/SignIn";
-import AddDriver from "./components/Driver/AddDriver";
-import EditDriver from "./components/Driver/EditDriver";
+
 import FetchTrip from "./components/Trip/FetchTrip";
 import EditTrip from "./components/Trip/EditTrip";
 import BulkUpload from "./components/Home/BulkCSVUpload/BulkUpload";
-import FetchDriver from "./components/Driver/FetchDriver";
 import "./app.css"
+import EmployeeList from "./components/Suppliers/EmployeeList";
+import InvoiceList from "./components/Invoice/InvoiceList";
+import ViewInvoice from "./components/Invoice/ViewInvoice";
+import AddEditViewEmployee from "./components/Suppliers/AddEditViewEmployee.jsx";
 
 function App() {
   return (
@@ -37,10 +39,12 @@ function App() {
           
           <Route path="/FetchTrip/:company/:date/All/:type/:routeId" element={<FetchTrip/>}/>
           <Route path="/bulkcsv" element={<BulkUpload/>} />
-
-          <Route path="/NewDriver" element={<AddDriver/>} />
-          <Route path="/EditDriver/:id" element={<EditDriver/>} />
-          <Route path="/FetchDriver/:id" element={<FetchDriver/>} />
+          <Route path="/invoice-list"  element={<InvoiceList />}  />
+            <Route path="/view-invoice/:invoiceId"  element={<ViewInvoice/>}  />
+          
+            <Route path="/employee-list" element={<EmployeeList />}  />
+            <Route path="/add-employee"  element={<AddEditViewEmployee />}  />
+            <Route path="/view-employee/:id" element={<AddEditViewEmployee />}  />
         </Routes>
     </BrowserRouter>
     </div>
