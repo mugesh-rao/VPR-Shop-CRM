@@ -13,6 +13,8 @@ import "./app.css";
 import InvoiceList from "./components/Invoice/InvoiceList";
 import ViewInvoice from "./components/Invoice/ViewInvoice";
 import Invoice from "./pages/Invoice";
+import SupplierTranscationTable from "./components/Suppliers/SupplierTranscationTable";
+import ViewSupplier from "./components/Suppliers/ViewSupplier";
 
 function App() {
   return (
@@ -29,11 +31,15 @@ function App() {
             <Route path="/Passbook" element={<Passbook />} />
             <Route path="/test" element={<Invoice/>} />
 
+
+            <Route path="/view-Supplier" element={<ViewSupplier/>} />
+
             <Route path="/Report" element={<Report />} />
             <Route path="/EditTrip/:company/:date/All/:type/:routeId" element={<EditTrip />}/>
             <Route path="/FetchTrip/:routeId" element={<FetchTrip />} />
             <Route path="/invoice-list" element={<InvoiceList />} />
             <Route path="/view-invoice/:invoiceId" element={<ViewInvoice />} />
+
 
           </Routes>
         </BrowserRouter>

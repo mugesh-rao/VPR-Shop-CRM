@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import { Timestamp, addDoc, collection, getDocs } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '../../config/FirebaseConfig';
 import TripCopy from './EditBook';
 import { v4 as uuidv4 } from 'uuid';
+import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import EditTranscation from './EditBook';
 
 const TransactionTable = () => {
     const [showModal, setShowModal] = useState(false);
@@ -12,8 +14,9 @@ const TransactionTable = () => {
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [filterType, setFilterType] = useState('');
+    const [EditModal, setEditModal] = useState(false);
+    const id = uuidv4();
 
-    const id = uuidv4() ;
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
@@ -29,42 +32,53 @@ const TransactionTable = () => {
 
         fetchTransactions();
     }, []);
+
     useEffect(() => {
         filterTransactions();
     }, [filterType, filterFromDate, filterToDate]);
 
+    const openEditModal = () => {
+        setEditModal(true);
+    };
+
+    const CloseEditModal = () => {
+        setEditModal(false);
+    };
+
+
+
     const filterTransactions = () => {
         let filteredData = transactions;
-    
+
         if (filterType !== '') {
-          filteredData = filteredData.filter((transaction) => transaction.type === filterType);
+            filteredData = filteredData.filter((transaction) => transaction.type === filterType);
         }
-    
+
         if (filterFromDate !== '' && filterToDate !== '') {
-          const fromDate = Timestamp.fromDate(new Date(filterFromDate));
-          const toDate = Timestamp.fromDate(new Date(filterToDate));
-    
-          filteredData = filteredData.filter(
-            (transaction) =>
-              transaction.date >= fromDate.toMillis() && transaction.date <= toDate.toMillis()
-          );
+            const fromDate = Timestamp.fromDate(new Date(filterFromDate));
+            const toDate = Timestamp.fromDate(new Date(filterToDate));
+
+            filteredData = filteredData.filter(
+                (transaction) =>
+                    transaction.date >= fromDate.toMillis() && transaction.date <= toDate.toMillis()
+            );
         }
-    
+
         setFilteredTransactions(filteredData);
-      };
-    
-      const handleFilterChange = (event) => {
+    };
+
+    const handleFilterChange = (event) => {
         setFilterType(event.target.value);
-      };
-    
-      const handleFromDateChange = (event) => {
+    };
+
+    const handleFromDateChange = (event) => {
         setFilterFromDate(event.target.value);
-      };
-    
-      const handleToDateChange = (event) => {
+    };
+
+    const handleToDateChange = (event) => {
         setFilterToDate(event.target.value);
-      };
-      
+    };
+
     const columns = [
         {
             name: 'Date & Time',
@@ -93,10 +107,24 @@ const TransactionTable = () => {
         },
         {
             name: 'Action',
-            selector: 'amount',
+            cell: (row) => (
+                <>
+                    <div
+                        className="text-[#393e46] text-center m-2 cursor-pointer font-medium text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out"
+                        onClick={() => EditTranscation(row.id)}
+                    >
+                        <MdDelete className="text-xl cursor-pointer hover:text-red-600" />
+                    </div>
+                    <div
+                        className="text-[#393e46] text-center m-2 cursor-pointer font-medium text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out"
+                        onClick={openEditModal}
+                    >
+                        <MdModeEditOutline className="text-xl cursor-pointer hover:text-red-600" />
+                    </div>
+                </>
+            ),
         },
-        
-        
+
     ];
     const customStyles = {
         headCells: {
@@ -128,9 +156,9 @@ const TransactionTable = () => {
         },
         head: {
             style: {
-              
+
                 backgroundColor: "#222831",
-               
+
                 alignItems: "center",
                 // justifyContent: "center",
                 fontSize: "1rem",
@@ -181,7 +209,7 @@ const TransactionTable = () => {
             remarks,
             paymentMode,
             createdAt: new Date().toISOString(),
-            id:id,
+            id: id,
         };
 
         try {
@@ -223,26 +251,26 @@ const TransactionTable = () => {
                                 <option value="cashIn">Cash In</option>
                             </select>
                             <label htmlFor="fromDate" className="mr-2 ml-4">
-          From:
-        </label>
-        <input
-          type="date"
-          id="fromDate"
-          value={filterFromDate}
-          onChange={handleFromDateChange}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
+                                From:
+                            </label>
+                            <input
+                                type="date"
+                                id="fromDate"
+                                value={filterFromDate}
+                                onChange={handleFromDateChange}
+                                className="border border-gray-300 rounded px-2 py-1"
+                            />
 
-        <label htmlFor="toDate" className="mr-2 ml-4">
-          To:
-        </label>
-        <input
-          type="date"
-          id="toDate"
-          value={filterToDate}
-          onChange={handleToDateChange}
-          className="border border-gray-300 rounded px-2 py-1"
-        />
+                            <label htmlFor="toDate" className="mr-2 ml-4">
+                                To:
+                            </label>
+                            <input
+                                type="date"
+                                id="toDate"
+                                value={filterToDate}
+                                onChange={handleToDateChange}
+                                className="border border-gray-300 rounded px-2 py-1"
+                            />
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 onClick={() => setShowModal(true)}
@@ -265,13 +293,16 @@ const TransactionTable = () => {
                             data={filteredTransactions}
 
                         />
-                        
-                         <TripCopy
-        
-        handleSubmit={handleSubmit}
-  
-        
-      />
+
+                        {/* <EditTranscation
+                            isOpen={openEditModal}
+                            onClose={CloseEditModal}
+                            date="2023-06-18"
+                            remarks="Sample remarks"
+                            type="Cash Out"
+                            party="Sample party"
+                            time="14:30"
+                        /> */}
                     </div>
                 </div>
             </div>
@@ -373,14 +404,9 @@ const TransactionTable = () => {
                     </div>
                 </div>
             )}
-              <TripCopy
-        
-        handleSubmit={handleSubmit}
-  
-        
-      />
+
         </div>
-        
+
     );
 };
 

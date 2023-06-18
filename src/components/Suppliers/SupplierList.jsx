@@ -1,18 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../config/FirebaseConfig';
+import { v4 as uuidv4 } from 'uuid';
+import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import { Link } from 'react-router-dom';
 
 const SupplierList = () => {
     const [showModal, setShowModal] = useState(false);
-
+    const [filterFromDate, setFilterFromDate] = useState('');
+    const [filterToDate, setFilterToDate] = useState('');
     const [transactions, setTransactions] = useState([]);
     const [filteredTransactions, setFilteredTransactions] = useState([]);
     const [filterType, setFilterType] = useState('');
+    const [EditModal, setEditModal] = useState(false);
+    const [type, setType] = useState('cashOut');
+    const [date, setDate] = useState('');
+    const [amount, setAmount] = useState('');
+    const [partyName, setPartyName] = useState('');
+    const [remarks, setRemarks] = useState('');
+    const [paymentMode, setPaymentMode] = useState('');
+
+    const handleTypeChange = (event) => {
+        setType(event.target.value);
+    };
+
+    const handleDateChange = (event) => {
+        setDate(event.target.value);
+    };
+
+    const handleAmountChange = (event) => {
+        setAmount(event.target.value);
+    };
+
+    const handlePartyNameChange = (event) => {
+        setPartyName(event.target.value);
+    };
+
+    const handleRemarksChange = (event) => {
+        setRemarks(event.target.value);
+    };
+
+    const handlePaymentModeChange = (event) => {
+        setPaymentMode(event.target.value);
+    };
+    const handleFilterChange = (event) => {
+        setFilterType(event.target.value);
+    };
+
+    const handleFromDateChange = (event) => {
+        setFilterFromDate(event.target.value);
+    };
+
+    const handleToDateChange = (event) => {
+        setFilterToDate(event.target.value);
+    };
+
+    const id = uuidv4();
+
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, "CashBook"));
+                const querySnapshot = await getDocs(collection(db, "Suppliers"));
                 const transactionData = querySnapshot.docs.map((doc) => doc.data());
                 setTransactions(transactionData);
                 setFilteredTransactions(transactionData);
@@ -24,50 +73,108 @@ const SupplierList = () => {
 
         fetchTransactions();
     }, []);
+
     useEffect(() => {
         filterTransactions();
-    }, [filterType]);
+    }, [filterType, filterFromDate, filterToDate]);
+
+    const openEditModal = () => {
+        setEditModal(true);
+    };
+
+    const CloseEditModal = () => {
+        setEditModal(false);
+    };
+
+
 
     const filterTransactions = () => {
-        if (filterType === '') {
-            setFilteredTransactions(transactions);
-        } else {
-            const filteredData = transactions.filter(
-                (transaction) => transaction.type === filterType
-            );
-            setFilteredTransactions(filteredData);
+        let filteredData = transactions;
+
+        if (filterType !== '') {
+            filteredData = filteredData.filter((transaction) => transaction.type === filterType);
         }
+
+        if (filterFromDate !== '' && filterToDate !== '') {
+            const fromDate = Timestamp.fromDate(new Date(filterFromDate));
+            const toDate = Timestamp.fromDate(new Date(filterToDate));
+
+            filteredData = filteredData.filter(
+                (transaction) =>
+                    transaction.date >= fromDate.toMillis() && transaction.date <= toDate.toMillis()
+            );
+        }
+
+        setFilteredTransactions(filteredData);
     };
 
-    const handleFilterChange = (event) => {
-        setFilterType(event.target.value);
-    };
+ 
+
     const columns = [
         {
-            name: 'Type',
-            selector: 'type',
+            name: 'ID',
+            selector: 'id',
             sortable: true,
+
+            cell: (row) => (
+              <Link to={`/view-Supplier/${row.id}`}>
+                <div className="text-[#393e46] text-center m-2 cursor-pointer font-medium text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out">
+                  <td className="py-3 text-[#393e46] text-center font-medium text-sm font-sans">
+                    <span className="truncate text-center text-sm font-sans text-[#323EDD] cursor-pointer  font-semibold ">
+                      {row.id}
+                    </span>
+                  </td>
+                </div>
+              </Link>
+            ),
+            
         },
         {
-            name: 'Date',
+            name: 'Date & Time',
             selector: 'date',
-        },
-        {
-            name: 'Amount',
-            selector: 'amount',
-        },
-        {
-            name: 'Party Name',
-            selector: 'partyName',
         },
         {
             name: 'Remarks',
             selector: 'remarks',
         },
         {
+            name: 'Type',
+            selector: 'type',
+            sortable: true,
+        },
+        {
+            name: 'Party Name',
+            selector: 'partyName',
+        },
+        {
             name: 'Payment Mode',
             selector: 'paymentMode',
         },
+        {
+            name: 'Amount',
+            selector: 'amount',
+        },
+        
+        {
+            name: 'Action',
+            cell: (row) => (
+                <>
+                    <div
+                        className="text-[#393e46] text-center m-2 cursor-pointer font-medium text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out"
+
+                    >
+                        <MdDelete className="text-xl cursor-pointer hover:text-red-600" />
+                    </div>
+                    <div
+                        className="text-[#393e46] text-center m-2 cursor-pointer font-medium text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out"
+                        onClick={openEditModal}
+                    >
+                        <MdModeEditOutline className="text-xl cursor-pointer hover:text-red-600" />
+                    </div>
+                </>
+            ),
+        },
+
     ];
     const customStyles = {
         headCells: {
@@ -99,48 +206,15 @@ const SupplierList = () => {
         },
         head: {
             style: {
-                borderRadius: "1rem",
+
                 backgroundColor: "#222831",
-                paddingLeft: "10px",
-                paddingRight: "10px",
-                paddingTop: "10px",
-                paddingBottom: "10px",
+
                 alignItems: "center",
                 // justifyContent: "center",
                 fontSize: "1rem",
                 height: "60px",
             },
         },
-    };
-    const [type, setType] = useState('cashOut');
-    const [date, setDate] = useState('');
-    const [amount, setAmount] = useState('');
-    const [partyName, setPartyName] = useState('');
-    const [remarks, setRemarks] = useState('');
-    const [paymentMode, setPaymentMode] = useState('');
-
-    const handleTypeChange = (event) => {
-        setType(event.target.value);
-    };
-
-    const handleDateChange = (event) => {
-        setDate(event.target.value);
-    };
-
-    const handleAmountChange = (event) => {
-        setAmount(event.target.value);
-    };
-
-    const handlePartyNameChange = (event) => {
-        setPartyName(event.target.value);
-    };
-
-    const handleRemarksChange = (event) => {
-        setRemarks(event.target.value);
-    };
-
-    const handlePaymentModeChange = (event) => {
-        setPaymentMode(event.target.value);
     };
 
     const handleSubmit = async (event) => {
@@ -154,12 +228,14 @@ const SupplierList = () => {
             partyName,
             remarks,
             paymentMode,
+            createdAt: new Date().toISOString(),
+            id: id,
         };
 
         try {
             // Add the transaction to Firestore
-            const tripsCollectionRef = collection(db, "CashBook");
-            await addDoc(tripsCollectionRef, transaction)
+            const cashbookref = collection(db, "Suppliers");
+            await addDoc(cashbookref, transaction)
 
             // Clear the form fields
             setType('cashOut');
@@ -179,10 +255,10 @@ const SupplierList = () => {
         <div>
             <div className="table w-full h-auto ">
                 <div className="w-full h-auto rounded-lg shadow-xl shadow-slate-250">
-                    <div className="flex flex-col gap-6 m-2 bg-white rounded-lg shadow-md">
+                    <div className="flex flex-col gap-6 m-2 ">
                         <div className="py-4">
                             <label htmlFor="filterType" className="mr-2">
-                                Filter by Type:
+                                Filter :
                             </label>
                             <select
                                 id="filterType"
@@ -194,6 +270,27 @@ const SupplierList = () => {
                                 <option value="cashOut">Cash Out</option>
                                 <option value="cashIn">Cash In</option>
                             </select>
+                            <label htmlFor="fromDate" className="mr-2 ml-4">
+                                From:
+                            </label>
+                            <input
+                                type="date"
+                                id="fromDate"
+                                value={filterFromDate}
+                                onChange={handleFromDateChange}
+                                className="border border-gray-300 rounded px-2 py-1"
+                            />
+
+                            <label htmlFor="toDate" className="mr-2 ml-4">
+                                To:
+                            </label>
+                            <input
+                                type="date"
+                                id="toDate"
+                                value={filterToDate}
+                                onChange={handleToDateChange}
+                                className="border border-gray-300 rounded px-2 py-1"
+                            />
                             <button
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 onClick={() => setShowModal(true)}
@@ -216,6 +313,16 @@ const SupplierList = () => {
                             data={filteredTransactions}
 
                         />
+
+                        {/* <EditTranscation
+                            isOpen={openEditModal}
+                            onClose={CloseEditModal}
+                            date="2023-06-18"
+                            remarks="Sample remarks"
+                            type="Cash Out"
+                            party="Sample party"
+                            time="14:30"
+                        /> */}
                     </div>
                 </div>
             </div>
@@ -317,7 +424,9 @@ const SupplierList = () => {
                     </div>
                 </div>
             )}
+
         </div>
+
     );
 };
 
