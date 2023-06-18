@@ -6,7 +6,6 @@ export default function Report() {
   
   return (
     <Layout>
-
     </Layout>
 
   )

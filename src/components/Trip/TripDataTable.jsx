@@ -291,7 +291,7 @@ export default function TripDataTable() {
                       </td>
                       <td className=" p-3 text-[#393e46] text-center   text-sm font-sans hover:transform hover:scale-125 hover:font-base transition duration-300 ease-in-out">
                         <Link
-                          to={`/FetchTrip/${row.Company}/${row.TripDate}/All/${row.TripType}/${row.RouteID}`}
+                          to={`/FetchTrip/${row.RouteID}`}
                         >
                           <span className={`text-${row.Duplicated ? 'red-600' : 'blue-600'} cursor-pointer font-semibold`}>
                             {row.RouteID}

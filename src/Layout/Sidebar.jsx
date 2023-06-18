@@ -13,11 +13,11 @@ const SidebarNew = () => {
   const location = useLocation();
   const Nav = [
     { title: "Home", path: "/Home", src: <HomeIcon /> },
-    { title: "Sales", path: "/Trip", src: <TripIcon /> },
-    { title: "Purchase", path: "/Driver", src: <DriverIcon /> },
-    { title: "Suppliers", path: "/employee-list", src: <EmployeeIcon /> },
-    { title: "Invoice", path: "/invoice-list", src: <InvoiceIcon /> },
+    { title: "Cash Book", path: "/CashBook", src: <TripIcon /> },
+    { title: "Suppliers", path: "/Suppliers", src: <EmployeeIcon /> },
     { title: "Monthly Reports", path: "/Report", src: <ReportIcon /> },
+    { title: "Invoice", path: "/invoice-list", src: <InvoiceIcon /> },
+    { title: "Purchase", path: "/Driver", src: <DriverIcon /> },
     { title: "Hiki Camera", path: "/Passbook", src: <PassbookIcon /> },
   ];
 

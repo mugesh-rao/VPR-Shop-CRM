@@ -1,6 +1,5 @@
 import React from "react";
-import { useLocation,  useNavigate } from "react-router-dom";
-import AddTripButton from './Buttons/AddTripButton';
+import { useLocation, useNavigate } from "react-router-dom";
 import AddDriverButton from "./Buttons/AddDriverButton";
 import AddEmployeeButton from "./Buttons/AddEmployeeButton";
 import CreateInvoice from "./Buttons/CreateInvoice";
@@ -47,10 +46,7 @@ const HeaderBar = () => {
       <header class="flex items-center h-[100px] px-6 sm:px-10 relative bg-[#539165]">
 
         <div>
-          {TripLogic === 'Trip' ? (
-            <AddTripButton />
-          ) : null}
-          
+
           {DriverLogic === 'Driver' ? (
             <AddDriverButton />
           ) : null}
@@ -58,7 +54,7 @@ const HeaderBar = () => {
           {EmployeeLogic === 'Employee' ? (
             <AddEmployeeButton />
           ) : null}
-          
+
           {InvoiceLogic === 'Invoice' ? (
             <CreateInvoice />
           ) : null}

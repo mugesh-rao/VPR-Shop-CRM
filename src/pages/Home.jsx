@@ -1,5 +1,4 @@
 import React from "react";
-import TripDataTable from "../components/Trip/TripDataTable";
 import Layout from "../Layout/Layout";
 
 function Home() {
@@ -31,11 +30,6 @@ function Home() {
           <button className="ml-4 bg-[#c93b3b] text-white py-2 px-16 rounded-lg"> Purchase</button>
         </div>
       </div>
-
-
-
-
-      <TripDataTable />
     </Layout>
   );
 }

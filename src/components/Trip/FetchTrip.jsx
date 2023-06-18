@@ -14,7 +14,6 @@ import FetchIndividualDriverData from './FetchTripDetails/FetchIndividualDriverD
 import Swal from 'sweetalert2'
 import { db } from '../../config/FirebaseConfig'
 
-
 function FetchTrip() {
 
   const navigate = useNavigate()
@@ -25,7 +24,7 @@ function FetchTrip() {
 
   useEffect(() => {
     async function fetchRoute() {
-      const docRef = doc(db, "RouteList", company, date, "All", type, routeId);
+      const docRef = doc(db, "RouteList", routeId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setListing(docSnap.data());
@@ -43,16 +42,16 @@ function FetchTrip() {
       confirmButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!'
     });
-  
+
     if (result.isConfirmed) {
-      const docRef = doc(db, 'RouteList', company, date, 'All', type, routeId);
+      const docRef = doc(db, 'RouteList', routeId);
       await deleteDoc(docRef);
-navigate(-2)
+      navigate(-2)
     }
   }
- 
 
-  
+
+
 
   return (
     <>
@@ -60,23 +59,23 @@ navigate(-2)
         <div className='flex flex-col gap-2'>
           <div className=' flex flex-row  items-center sm:mx-0'>
             <div className='flex flex-row gap-4'>
-            <div className='p-2 bg-white cursor-pointer drop-shadow-md rounded-lg shadow-md hover:bg-gray-200 active:bg-gray-400'>
-              <IoMdArrowRoundBack
-                onClick={() => navigate(-1)}
-                className='text-[#a61f69] w-6 h-6 ' />
-            </div>
-            
-            <div className='p-2 bg-white cursor-pointer drop-shadow-md rounded-lg shadow-md hover:bg-gray-200 active:bg-gray-400' onClick={() => deleteRoute()}>
-  <RiDeleteBin6Line className='text-[#ff0000] w-6 h-6' />
-</div>
-
-            <Link to={`/EditTrip/${Listing.Company}/${Listing.TripDate}/All/${Listing.TripType}/${Listing.RouteID}`}>
-
               <div className='p-2 bg-white cursor-pointer drop-shadow-md rounded-lg shadow-md hover:bg-gray-200 active:bg-gray-400'>
-                <FiEdit className='text-[#38e54d] w-6 h-6 ' />
+                <IoMdArrowRoundBack
+                  onClick={() => navigate(-1)}
+                  className='text-[#a61f69] w-6 h-6 ' />
               </div>
-            </Link>
-           
+
+              <div className='p-2 bg-white cursor-pointer drop-shadow-md rounded-lg shadow-md hover:bg-gray-200 active:bg-gray-400' onClick={() => deleteRoute()}>
+                <RiDeleteBin6Line className='text-[#ff0000] w-6 h-6' />
+              </div>
+
+              <Link to={`/EditTrip/${Listing.RouteID}`}>
+
+                <div className='p-2 bg-white cursor-pointer drop-shadow-md rounded-lg shadow-md hover:bg-gray-200 active:bg-gray-400'>
+                  <FiEdit className='text-[#38e54d] w-6 h-6 ' />
+                </div>
+              </Link>
+
             </div>
           </div>
           <div className='flex flex-col gap-4'>
@@ -84,7 +83,7 @@ navigate(-2)
               <FetchIndividualTripData
               />
               <div className='flex flex-col gap-2 m-2'>
-                <FetchIndividualDriverData/>
+                <FetchIndividualDriverData />
                 <div className='flex flex-row gap-2'>
                   <FetchVehicleStatus />
                   <FetchTripStatus />
